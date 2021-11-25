@@ -7,7 +7,7 @@ public class TestTemplatePerformance {
     private Template template;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp(){
         template = new Template("${one}, ${two}, ${three}, ${four}, ${five}, " +
                 "${six}, ${seven}, ${eight}, ${nine}, ${ten}, " +
                 "${eleven}, ${twelve}, ${thirteen}, ${fourteen}, ${fifteen}, " +
