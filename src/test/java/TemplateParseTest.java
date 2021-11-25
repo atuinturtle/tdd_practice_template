@@ -12,9 +12,9 @@ class TemplateParseTest {
     void setUp() {
     }
 
-    private List<String> parse(String template) {
+    private List<Segment> parse(String template) {
         TemplateParse parse = new TemplateParse();
-        return parse.parse(template);
+        return parse.parseSegments(template);
     }
 
     private void assertSegments(List<?> actual, Object... expected) {
@@ -24,19 +24,28 @@ class TemplateParseTest {
 
     @Test
     public void emptyTemplateRendersAsEmptyString() {
-        List<String> segments = parse("");
-        assertSegments(segments, "");
+        List<Segment> segments = parse("");
+        assertSegments(segments, new PlainText(""));
     }
 
     @Test
     public void templateWithOnlyPlainText() {
-        List<String> segments = parse("plain text only");
-        assertSegments(segments, "plain text only");
+        List<Segment> segments = parse("plain text only");
+        assertSegments(segments, new PlainText("plain text only"));
     }
 
     @Test
-    public void parsingMultipleVariables() throws Exception {
-        List<String> segments = parse("${a}:${b}:${c}");
-        assertSegments(segments, "${a}", ":", "${b}", ":", "${c}");
+    public void parsingMultipleVariables() {
+        List<Segment> segments = parse("${a}:${b}:${c}");
+        assertSegments(segments, new Variable("a"), new PlainText(":"), new Variable("b"), new PlainText(":"), new Variable("c"));
+    }
+
+    @Test
+    public void parsingTemplateIntoSegmentObjects() {
+        TemplateParse p = new TemplateParse();
+        List<Segment> segments = p.parseSegments("a ${b} c ${d}");
+        assertSegments(segments,
+                new PlainText("a "), new Variable("b"),
+                new PlainText(" c "), new Variable("d"));
     }
 }
