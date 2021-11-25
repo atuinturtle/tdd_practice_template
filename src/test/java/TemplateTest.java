@@ -29,7 +29,9 @@ class TemplateTest {
 
     @Test
     public void missingValueRaisesException() {
-        assertThrows(MissingValueException.class, () -> new Template("${foo}").evaluate());
+        MissingValueException exception =
+                assertThrows(MissingValueException.class, () -> new Template("${foo}").evaluate());
+        assertEquals("No value for ${foo}", exception.getMessage());
     }
 
     private void assertTemplateEvaluatesTo(String expected) {
